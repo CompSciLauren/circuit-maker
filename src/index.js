@@ -28,7 +28,7 @@ function addTrueButton(x, y) {
     y: y,
     width: circleWidth,
     height: circleHeight,
-    fill: 'orange',
+    fill: 'lightgreen',
     stroke: 'black',
     strokeWidth: 4,
   });
@@ -61,7 +61,7 @@ function addFalseButton(x, y) {
     y: y,
     width: circleWidth,
     height: circleHeight,
-    fill: 'orange',
+    fill: 'lightgreen',
     stroke: 'black',
     strokeWidth: 4,
   });
@@ -88,7 +88,7 @@ function addAndGate(x, y) {
     draggable: true,
   });
   const rectWidth = 100;
-  const rectHeight = 50;
+  const rectHeight = 100;
   const rect = new Konva.Rect({
     x: x,
     y: y,
@@ -121,13 +121,13 @@ function addOrGate(x, y) {
     draggable: true,
   });
   const rectWidth = 100;
-  const rectHeight = 50;
+  const rectHeight = 100;
   const rect = new Konva.Rect({
     x: x,
     y: y,
     width: rectWidth,
     height: rectHeight,
-    fill: 'orange',
+    fill: 'skyblue',
     stroke: 'black',
     strokeWidth: 4,
   });
@@ -160,7 +160,7 @@ function addConnectorButton(x, y) {
     y: y,
     width: rectWidth,
     height: rectHeight,
-    fill: 'orange',
+    fill: 'gray',
     stroke: 'black',
     strokeWidth: 4,
   });
