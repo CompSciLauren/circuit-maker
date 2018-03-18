@@ -3,18 +3,16 @@ import Konva from 'konva';
 const innerWidth = window.innerWidth;
 const innerHeight = window.innerHeight;
 
-let truePos, falsePos;
-let andPos, orPos;
-let connectorPos;
+const gateArray = [];
+const gateWidth = 100;
+const gateHeight = 100;
 
-// first we need to create a stage
 const stage = new Konva.Stage({
-  container: 'canvas',   // id of container <div>
+  container: 'canvas',
   width: innerWidth,
   height: innerHeight,
 });
 
-// then create layer
 const layer = new Konva.Layer();
 
 function addTrueButton(x, y) {
@@ -40,9 +38,6 @@ function addTrueButton(x, y) {
     fontSize: 30,
     fontFamily: 'Comic Sans',
     fill: 'black',
-  });
-  group.on("dragend", function(e){
-    truePos = circle.getAbsolutePosition();
   });
 
   group.add(circle);
@@ -74,9 +69,6 @@ function addFalseButton(x, y) {
     fontFamily: 'Comic Sans',
     fill: 'black',
   });
-  group.on("dragend", function(e){
-    falsePos = circle.getAbsolutePosition();
-  });
 
   group.add(circle);
   group.add(text);
@@ -87,8 +79,8 @@ function addAndGate(x, y) {
   const group = new Konva.Group({
     draggable: true,
   });
-  const rectWidth = 100;
-  const rectHeight = 100;
+  const rectWidth = gateWidth;
+  const rectHeight = gateHeight;
   const rect = new Konva.Rect({
     x: x,
     y: y,
@@ -107,21 +99,19 @@ function addAndGate(x, y) {
     fontFamily: 'Comic Sans',
     fill: 'black',
   });
-  group.on("dragend", function(e){
-    andPos = rect.getAbsolutePosition();
-  });
 
   group.add(rect);
   group.add(text);
   layer.add(group);
+  gateArray.push(group);
 };
 
 function addOrGate(x, y) {
   const group = new Konva.Group({
     draggable: true,
   });
-  const rectWidth = 100;
-  const rectHeight = 100;
+  const rectWidth = gateWidth;
+  const rectHeight = gateHeight;
   const rect = new Konva.Rect({
     x: x,
     y: y,
@@ -140,13 +130,11 @@ function addOrGate(x, y) {
     fontFamily: 'Comic Sans',
     fill: 'black',
   });
-  group.on("dragend", function(e){
-    orPos = rect.getAbsolutePosition();
-  });
 
   group.add(rect);
   group.add(text);
   layer.add(group);
+  gateArray.push(group);
 };
 
 function addConnectorButton(x, y) {
@@ -165,17 +153,30 @@ function addConnectorButton(x, y) {
     strokeWidth: 4,
   });
 
-  group.on("dragend", function(e){
-    connectorPos = rect.getAbsolutePosition();
+  group.on("dragend", function (e) {
+    const listOfCollisions = gateArray.map((gate) => {
+        const gatePos = gate.getAbsolutePosition();
+        const connectorX = group.getAbsolutePosition().x;
+        const connectorY = group.getAbsolutePosition().y;
+        const gateX = gatePos.x;
+        const gateY = gatePos.y;
+        return detectRectangleCollision(gateX, gateY, gateWidth, gateHeight, connectorX, connectorY, rectWidth, rectHeight);
+      },
+    );
 
-    if (connectorPos.x >= andPos.x && connectorPos.x <= andPos.x+100) {
-      const groupConnected = new Konva.Group();
-      console.log("Connector and And Gate connected",groupConnected);
-    }
+    console.log(listOfCollisions);
+
+    group.moveToBottom();
   });
-
   group.add(rect);
   layer.add(group);
+}
+
+function detectRectangleCollision(gatePosX, gatePosY, gateWidth, gateHeight, connectorPosX, connectorPosY, connectorWidth, connectorHeight) {
+  return (gatePosX < connectorPosX + connectorWidth &&
+    gatePosX + gateWidth > connectorPosX &&
+    gatePosY < connectorPosY + connectorHeight &&
+    gateHeight + gatePosY > connectorPosY);
 }
 
 function trueButtonClick() {
