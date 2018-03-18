@@ -2,10 +2,18 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <title>webpack 4 quickstart</title>
+  <title>Circuit Maker</title>
+  <style type="text/css">
+    #canvas {
+      border: 1px solid #333;
+    }
+  </style>
 </head>
 <body>
-<div id="app">
+<div id="controls">
+  <input id="andGateButton" type="button" value="And Gate" onclick="andGateButtonClick();" />
+</div>
+<div id="canvas">
 </div>
 </body>
 </html>
