@@ -76,4 +76,10 @@ function andGateButtonClick() {
   stage.add(layer);
 }
 
+function orGateButtonClick() {
+  addOrGate(0, 0);
+  stage.add(layer);
+}
+
 window.andGateButtonClick = andGateButtonClick;
+window.orGateButtonClick = orGateButtonClick;
