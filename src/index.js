@@ -42,6 +42,35 @@ function addTrueButton(x, y) {
   layer.add(group);
 };
 
+function addFalseButton(x, y) {
+  const group = new Konva.Group({
+    draggable: true,
+  });
+  const circleWidth = 100;
+  const circleHeight = 50;
+  const circle = new Konva.Circle({
+    x: x,
+    y: y,
+    width: circleWidth,
+    height: circleHeight,
+    fill: 'orange',
+    stroke: 'black',
+    strokeWidth: 4,
+  });
+
+  const text = new Konva.Text({
+    x: x - 10,
+    y: y + circleHeight - 65,
+    text: 'F',
+    fontSize: 30,
+    fontFamily: 'Comic Sans',
+    fill: 'black',
+  });
+  group.add(circle);
+  group.add(text);
+  layer.add(group);
+};
+
 function addAndGate(x, y) {
   const group = new Konva.Group({
     draggable: true,
@@ -105,6 +134,11 @@ function trueButtonClick() {
   stage.add(layer);
 }
 
+function falseButtonClick() {
+  addFalseButton(0, 0)
+  stage.add(layer);
+}
+
 function andGateButtonClick() {
   addAndGate(0, 0);
   stage.add(layer);
@@ -115,6 +149,7 @@ function orGateButtonClick() {
   stage.add(layer);
 }
 
+window.trueButtonClick = trueButtonClick;
+window.falseButtonClick = falseButtonClick;
 window.andGateButtonClick = andGateButtonClick;
 window.orGateButtonClick = orGateButtonClick;
-window.trueButtonClick = trueButtonClick;
