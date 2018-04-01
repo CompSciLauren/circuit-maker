@@ -1,14 +1,30 @@
 import Konva from 'konva';
 
+import Connector from './Connector';
+import Gate from './Gate';
+import Input from './Input';
+
 const innerWidth = window.innerWidth;
 const innerHeight = window.innerHeight;
 
 const gateArray = [];
 const booleanInputsArray = [];
+const connectorsArray = [];
 const gateWidth = 100;
 const gateHeight = 100;
 const booleanInputWidth = 100;
 const booleanInputHeight = 50;
+
+function connectConnectorToElement(connector, itemToConnect) {
+  if (itemToConnect instanceof Input) {
+    itemToConnect.setOutput(connector);
+    connector.setInput(itemToConnect);
+  }
+  else if (itemToConnect instanceof Gate) {
+    connector.setOutput(itemToConnect);
+    itemToConnect.setInput(connector);
+  }
+}
 
 const stage = new Konva.Stage({
   container: 'canvas',
@@ -46,7 +62,10 @@ function addTrueInput(x, y) {
   group.add(circle);
   group.add(text);
   layer.add(group);
-  booleanInputsArray.push(group);
+  booleanInputsArray.push({
+    booleanInput: new Input(),
+    konvaGroup: group,
+  });
 };
 
 function addFalseInput(x, y) {
@@ -77,7 +96,10 @@ function addFalseInput(x, y) {
   group.add(circle);
   group.add(text);
   layer.add(group);
-  booleanInputsArray.push(group);
+  booleanInputsArray.push({
+    booleanInput: new Input(),
+    konvaGroup: group,
+  });
 };
 
 function addAndGate(x, y) {
@@ -108,7 +130,10 @@ function addAndGate(x, y) {
   group.add(rect);
   group.add(text);
   layer.add(group);
-  gateArray.push(group);
+  gateArray.push({
+    gate: new Gate(),
+    konvaGroup: group,
+  });
 };
 
 function addOrGate(x, y) {
@@ -139,7 +164,10 @@ function addOrGate(x, y) {
   group.add(rect);
   group.add(text);
   layer.add(group);
-  gateArray.push(group);
+  gateArray.push({
+    gate: new Gate(),
+    konvaGroup: group,
+  });
 };
 
 function addConnector(x, y) {
@@ -158,25 +186,41 @@ function addConnector(x, y) {
     strokeWidth: 4,
   });
 
+  const connector = new Connector();
+  connectorsArray.push({
+    connector: connector,
+    konvaGroup: group,
+  });
+
   group.on("dragend", function (e) {
     const connectorX = group.getAbsolutePosition().x;
     const connectorY = group.getAbsolutePosition().y;
-    const listOfGateCollisions = gateArray.map((gate) => {
-      const gatePos = gate.getAbsolutePosition();
+
+    const gateThatWasCollidedWith = gateArray.find((gateEntry) => {
+      const konvaGroup = gateEntry.konvaGroup;
+      const gatePos = konvaGroup.getAbsolutePosition();
       const gateX = gatePos.x;
       const gateY = gatePos.y;
+
       return detectRectangleCollision(gateX, gateY, gateWidth, gateHeight, connectorX, connectorY, rectWidth, rectHeight);
     });
 
-    const listOfBooleanInputCollisions = booleanInputsArray.map((input) => {
-      const booleanInputPos = input.getAbsolutePosition();
+    const booleanInputThatWasCollidedWith = booleanInputsArray.find((inputEntry) => {
+      const konvaGroup = inputEntry.konvaGroup;
+      const booleanInputPos = konvaGroup.getAbsolutePosition();
       const booleanInputX = booleanInputPos.x;
       const booleanInputY = booleanInputPos.y;
       return detectRectangleCollision(booleanInputX, booleanInputY, booleanInputWidth, booleanInputHeight, connectorX, connectorY, rectWidth, rectHeight);
     });
 
-    console.log(listOfGateCollisions);
-    console.log(listOfBooleanInputCollisions);
+    if (booleanInputThatWasCollidedWith) {
+      const booleanInput = booleanInputThatWasCollidedWith.booleanInput;
+      connectConnectorToElement(connector, booleanInput);
+      console.log('Words by it', connector);
+    }
+
+    console.log(gateThatWasCollidedWith);
+    console.log(booleanInputThatWasCollidedWith);
 
     group.moveToBottom();
   });
@@ -185,6 +229,7 @@ function addConnector(x, y) {
 }
 
 function detectRectangleCollision(gatePosX, gatePosY, gateWidth, gateHeight, connectorPosX, connectorPosY, connectorWidth, connectorHeight) {
+  console.log(gatePosX, gatePosY, gateWidth, gateHeight, connectorPosX, connectorPosY, connectorWidth, connectorHeight);
   return (gatePosX < connectorPosX + connectorWidth &&
     gatePosX + gateWidth > connectorPosX &&
     gatePosY < connectorPosY + connectorHeight &&
@@ -209,7 +254,6 @@ function andGateClick() {
 function orGateClick() {
   addOrGate(0, 0);
   stage.add(layer);
-  console.log(connectorX, connectorY);
 }
 
 function connectorClick() {
