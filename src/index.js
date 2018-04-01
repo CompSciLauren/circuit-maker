@@ -4,8 +4,11 @@ const innerWidth = window.innerWidth;
 const innerHeight = window.innerHeight;
 
 const gateArray = [];
+const booleanInputsArray = [];
 const gateWidth = 100;
 const gateHeight = 100;
+const booleanInputWidth = 100;
+const booleanInputHeight = 50;
 
 const stage = new Konva.Stage({
   container: 'canvas',
@@ -15,12 +18,12 @@ const stage = new Konva.Stage({
 
 const layer = new Konva.Layer();
 
-function addTrueButton(x, y) {
+function addTrueInput(x, y) {
   const group = new Konva.Group({
     draggable: true,
   });
-  const circleWidth = 100;
-  const circleHeight = 50;
+  const circleWidth = booleanInputWidth;
+  const circleHeight = booleanInputHeight;
   const circle = new Konva.Circle({
     x: x,
     y: y,
@@ -43,14 +46,15 @@ function addTrueButton(x, y) {
   group.add(circle);
   group.add(text);
   layer.add(group);
+  booleanInputsArray.push(group);
 };
 
-function addFalseButton(x, y) {
+function addFalseInput(x, y) {
   const group = new Konva.Group({
     draggable: true,
   });
-  const circleWidth = 100;
-  const circleHeight = 50;
+  const circleWidth = booleanInputWidth;
+  const circleHeight = booleanInputHeight;
   const circle = new Konva.Circle({
     x: x,
     y: y,
@@ -73,6 +77,7 @@ function addFalseButton(x, y) {
   group.add(circle);
   group.add(text);
   layer.add(group);
+  booleanInputsArray.push(group);
 };
 
 function addAndGate(x, y) {
@@ -137,7 +142,7 @@ function addOrGate(x, y) {
   gateArray.push(group);
 };
 
-function addConnectorButton(x, y) {
+function addConnector(x, y) {
   const group = new Konva.Group({
     draggable: true,
   });
@@ -154,17 +159,24 @@ function addConnectorButton(x, y) {
   });
 
   group.on("dragend", function (e) {
-    const listOfCollisions = gateArray.map((gate) => {
-        const gatePos = gate.getAbsolutePosition();
-        const connectorX = group.getAbsolutePosition().x;
-        const connectorY = group.getAbsolutePosition().y;
-        const gateX = gatePos.x;
-        const gateY = gatePos.y;
-        return detectRectangleCollision(gateX, gateY, gateWidth, gateHeight, connectorX, connectorY, rectWidth, rectHeight);
-      },
-    );
+    const connectorX = group.getAbsolutePosition().x;
+    const connectorY = group.getAbsolutePosition().y;
+    const listOfGateCollisions = gateArray.map((gate) => {
+      const gatePos = gate.getAbsolutePosition();
+      const gateX = gatePos.x;
+      const gateY = gatePos.y;
+      return detectRectangleCollision(gateX, gateY, gateWidth, gateHeight, connectorX, connectorY, rectWidth, rectHeight);
+    });
 
-    console.log(listOfCollisions);
+    const listOfBooleanInputCollisions = booleanInputsArray.map((input) => {
+      const booleanInputPos = input.getAbsolutePosition();
+      const booleanInputX = booleanInputPos.x;
+      const booleanInputY = booleanInputPos.y;
+      return detectRectangleCollision(booleanInputX, booleanInputY, booleanInputWidth, booleanInputHeight, connectorX, connectorY, rectWidth, rectHeight);
+    });
+
+    console.log(listOfGateCollisions);
+    console.log(listOfBooleanInputCollisions);
 
     group.moveToBottom();
   });
@@ -179,34 +191,34 @@ function detectRectangleCollision(gatePosX, gatePosY, gateWidth, gateHeight, con
     gateHeight + gatePosY > connectorPosY);
 }
 
-function trueButtonClick() {
-  addTrueButton(0, 0);
+function trueInputClick() {
+  addTrueInput(0, 0);
   stage.add(layer);
 }
 
-function falseButtonClick() {
-  addFalseButton(0, 0);
+function falseInputClick() {
+  addFalseInput(0, 0);
   stage.add(layer);
 }
 
-function andGateButtonClick() {
+function andGateClick() {
   addAndGate(0, 0);
   stage.add(layer);
 }
 
-function orGateButtonClick() {
+function orGateClick() {
   addOrGate(0, 0);
   stage.add(layer);
   console.log(connectorX, connectorY);
 }
 
-function connectorButtonClick() {
-  addConnectorButton(0, 0);
+function connectorClick() {
+  addConnector(0, 0);
   stage.add(layer);
 }
 
-window.trueButtonClick = trueButtonClick;
-window.falseButtonClick = falseButtonClick;
-window.andGateButtonClick = andGateButtonClick;
-window.orGateButtonClick = orGateButtonClick;
-window.connectorButtonClick = connectorButtonClick;
+window.trueInputClick = trueInputClick;
+window.falseInputClick = falseInputClick;
+window.andGateClick = andGateClick;
+window.orGateClick = orGateClick;
+window.connectorClick = connectorClick;
