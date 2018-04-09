@@ -15,6 +15,7 @@
 + Beginner-friendly tutorial (mostly writing in English and printing out to screen)
 
 **Analysis**
+
 *Things I will need to learn:*
 + Review boolean logic gates
 + JavaScript
@@ -24,7 +25,6 @@
 + Environment not being user-friendly; user can drag and drop but make it look jumbled and confusing
 
 **Project Progress**
-
-* Step One: Planning & Design
-* Step Two: Implement Logic Code & Testing
-* Step Three: Implement Graphical Code & Testing
++ Step One: Planning & Design
++ Step Two: Implement Logic Code & Testing
++ Step Three: Implement Graphical Code & Testing

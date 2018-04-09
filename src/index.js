@@ -19,12 +19,10 @@ function connectConnectorToElement(connector, itemToConnect) {
   if (itemToConnect instanceof Input) {
     itemToConnect.setOutput(connector);
     connector.setInput(itemToConnect);
-    console.log("Connected input")
   }
   else if (itemToConnect instanceof Gate) {
     connector.setOutput(itemToConnect);
     itemToConnect.setInput(connector);
-    console.log("Connected output")
   }
 }
 
@@ -219,15 +217,11 @@ function addConnector(x, y) {
     if (booleanInputThatWasCollidedWith) {
       const booleanInput = booleanInputThatWasCollidedWith.booleanInput;
       connectConnectorToElement(connector, booleanInput);
-      console.log(connector);
     }
     if (gateThatWasCollidedWith) {
       const gate = gateThatWasCollidedWith.gate;
       connectConnectorToElement(connector, gate);
     }
-
-    console.log(gateThatWasCollidedWith);
-    console.log(booleanInputThatWasCollidedWith);
 
     group.moveToBottom();
   });
@@ -236,7 +230,6 @@ function addConnector(x, y) {
 }
 
 function detectRectangleCollision(itemPosX, itemPosY, itemWidth, itemHeight, connectorPosX, connectorPosY, connectorWidth, connectorHeight) {
-  console.log(itemPosX, itemPosY, itemWidth, itemHeight, connectorPosX, connectorPosY, connectorWidth, connectorHeight);
   return (itemPosX < connectorPosX + connectorWidth &&
     itemPosX + itemWidth > connectorPosX &&
     itemPosY < connectorPosY + connectorHeight &&

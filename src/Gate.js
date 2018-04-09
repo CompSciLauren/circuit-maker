@@ -14,10 +14,21 @@ class Gate {
      * Sets the input of the {@link Gate}.
      * 
      * @param {Connector} input
-     *      The input to connect. 
+     *      The input to connect.
      */
     setInput(input) {
-        this.input1 = input;
+        // Make sure same connector isn't connected more than once.
+        if (this.input1) {
+            if (input.connectorID == this.input1.connectorID) {
+                throw "This connector is already connected!";
+            }
+            else {
+                this.input2 = input;
+            }
+        }
+        else if (!this.input1) {
+            this.input1 = input;
+        }
     }
 }
 

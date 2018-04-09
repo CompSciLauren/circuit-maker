@@ -1,8 +1,12 @@
+let ID = 0;
+
 /**
  * Class to connect gates and inputs.
  */
 class Connector {
     constructor() {
+        this.connectorID = ID + 1;
+        ID += 1;
         this.input = null;
         this.output = null;
     }
