@@ -1,3 +1,6 @@
+/**
+ * Class to connect gates and inputs.
+ */
 class Connector {
     constructor() {
         this.input = null;
