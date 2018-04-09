@@ -12,17 +12,19 @@ const booleanInputsArray = [];
 const connectorsArray = [];
 const gateWidth = 100;
 const gateHeight = 100;
-const booleanInputWidth = 100;
+const booleanInputWidth = 50;
 const booleanInputHeight = 50;
 
 function connectConnectorToElement(connector, itemToConnect) {
   if (itemToConnect instanceof Input) {
     itemToConnect.setOutput(connector);
     connector.setInput(itemToConnect);
+    console.log("Connected input")
   }
   else if (itemToConnect instanceof Gate) {
     connector.setOutput(itemToConnect);
     itemToConnect.setInput(connector);
+    console.log("Connected output")
   }
 }
 
@@ -38,28 +40,28 @@ function addTrueInput(x, y) {
   const group = new Konva.Group({
     draggable: true,
   });
-  const circleWidth = booleanInputWidth;
-  const circleHeight = booleanInputHeight;
-  const circle = new Konva.Circle({
+  const rectWidth = booleanInputWidth;
+  const rectHeight = booleanInputHeight;
+  const rect = new Konva.Rect({
     x: x,
     y: y,
-    width: circleWidth,
-    height: circleHeight,
+    width: rectWidth,
+    height: rectHeight,
     fill: 'lightgreen',
     stroke: 'black',
     strokeWidth: 4,
   });
 
   const text = new Konva.Text({
-    x: x - 10,
-    y: y + circleHeight - 65,
+    x: x + 15,
+    y: y + rectHeight / 4,
     text: 'T',
     fontSize: 30,
     fontFamily: 'Comic Sans',
     fill: 'black',
   });
 
-  group.add(circle);
+  group.add(rect);
   group.add(text);
   layer.add(group);
   booleanInputsArray.push({
@@ -72,28 +74,28 @@ function addFalseInput(x, y) {
   const group = new Konva.Group({
     draggable: true,
   });
-  const circleWidth = booleanInputWidth;
-  const circleHeight = booleanInputHeight;
-  const circle = new Konva.Circle({
+  const rectWidth = booleanInputWidth;
+  const rectHeight = booleanInputHeight;
+  const rect = new Konva.Rect({
     x: x,
     y: y,
-    width: circleWidth,
-    height: circleHeight,
+    width: rectWidth,
+    height: rectHeight,
     fill: 'lightgreen',
     stroke: 'black',
     strokeWidth: 4,
   });
 
   const text = new Konva.Text({
-    x: x - 10,
-    y: y + circleHeight - 65,
+    x: x + 15,
+    y: y + rectHeight / 4,
     text: 'F',
     fontSize: 30,
     fontFamily: 'Comic Sans',
     fill: 'black',
   });
 
-  group.add(circle);
+  group.add(rect);
   group.add(text);
   layer.add(group);
   booleanInputsArray.push({
@@ -210,13 +212,18 @@ function addConnector(x, y) {
       const booleanInputPos = konvaGroup.getAbsolutePosition();
       const booleanInputX = booleanInputPos.x;
       const booleanInputY = booleanInputPos.y;
+
       return detectRectangleCollision(booleanInputX, booleanInputY, booleanInputWidth, booleanInputHeight, connectorX, connectorY, rectWidth, rectHeight);
     });
 
     if (booleanInputThatWasCollidedWith) {
       const booleanInput = booleanInputThatWasCollidedWith.booleanInput;
       connectConnectorToElement(connector, booleanInput);
-      console.log('Words by it', connector);
+      console.log(connector);
+    }
+    if (gateThatWasCollidedWith) {
+      const gate = gateThatWasCollidedWith.gate;
+      connectConnectorToElement(connector, gate);
     }
 
     console.log(gateThatWasCollidedWith);
@@ -228,12 +235,12 @@ function addConnector(x, y) {
   layer.add(group);
 }
 
-function detectRectangleCollision(gatePosX, gatePosY, gateWidth, gateHeight, connectorPosX, connectorPosY, connectorWidth, connectorHeight) {
-  console.log(gatePosX, gatePosY, gateWidth, gateHeight, connectorPosX, connectorPosY, connectorWidth, connectorHeight);
-  return (gatePosX < connectorPosX + connectorWidth &&
-    gatePosX + gateWidth > connectorPosX &&
-    gatePosY < connectorPosY + connectorHeight &&
-    gateHeight + gatePosY > connectorPosY);
+function detectRectangleCollision(itemPosX, itemPosY, itemWidth, itemHeight, connectorPosX, connectorPosY, connectorWidth, connectorHeight) {
+  console.log(itemPosX, itemPosY, itemWidth, itemHeight, connectorPosX, connectorPosY, connectorWidth, connectorHeight);
+  return (itemPosX < connectorPosX + connectorWidth &&
+    itemPosX + itemWidth > connectorPosX &&
+    itemPosY < connectorPosY + connectorHeight &&
+    itemHeight + itemPosY > connectorPosY);
 }
 
 function trueInputClick() {
