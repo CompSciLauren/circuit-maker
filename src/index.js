@@ -271,7 +271,7 @@ function connectorClick() {
 
 function outputClick() {
   for (let i = 0; i < gateArray.length; i++) {
-    alert("Result for Gate #" + i + " added: " + gateArray[i].gate.evaluateInputs());
+    alert("Result for Gate #" + (i+1) + " added: " + gateArray[i].gate.evaluateInputs());
   }
 }
 
