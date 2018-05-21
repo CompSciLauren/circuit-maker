@@ -2,8 +2,9 @@
  * Class to represent boolean inputs.
  */
 class Input {
-    constructor() {
+    constructor(binaryValue) {
         this.output = null;
+        this.value = binaryValue;
     }
     /**
      * Sets the output of the {@link Input}.
@@ -13,6 +14,10 @@ class Input {
      */
     setOutput(output) {
         this.output = output;
+    }
+
+    getValue() {
+        return this.value;
     }
 }
 

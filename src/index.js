@@ -63,8 +63,9 @@ function addTrueInput(x, y) {
   group.add(text);
   layer.add(group);
   booleanInputsArray.push({
-    booleanInput: new Input(),
+    booleanInput: new Input(true),
     konvaGroup: group,
+    value: 1,
   });
 };
 
@@ -97,8 +98,9 @@ function addFalseInput(x, y) {
   group.add(text);
   layer.add(group);
   booleanInputsArray.push({
-    booleanInput: new Input(),
+    booleanInput: new Input(false),
     konvaGroup: group,
+    value: 0,
   });
 };
 
@@ -131,8 +133,9 @@ function addAndGate(x, y) {
   group.add(text);
   layer.add(group);
   gateArray.push({
-    gate: new Gate(),
+    gate: new Gate('AND'),
     konvaGroup: group,
+    type: 0, // using 0 to refer to 'and' Gate type
   });
 };
 
@@ -165,8 +168,9 @@ function addOrGate(x, y) {
   group.add(text);
   layer.add(group);
   gateArray.push({
-    gate: new Gate(),
+    gate: new Gate('OR'),
     konvaGroup: group,
+    type: 1, // using 1 to refer to 'or' Gate type
   });
 };
 
@@ -198,19 +202,23 @@ function addConnector(x, y) {
 
     const gateThatWasCollidedWith = gateArray.find((gateEntry) => {
       const konvaGroup = gateEntry.konvaGroup;
+      const gateValue = gateEntry.type;
       const gatePos = konvaGroup.getAbsolutePosition();
       const gateX = gatePos.x;
       const gateY = gatePos.y;
 
+      console.log("Gate attached:", gateValue);
       return detectRectangleCollision(gateX, gateY, gateWidth, gateHeight, connectorX, connectorY, rectWidth, rectHeight);
     });
 
     const booleanInputThatWasCollidedWith = booleanInputsArray.find((inputEntry) => {
       const konvaGroup = inputEntry.konvaGroup;
+      const booleanInputValue = inputEntry.value;
       const booleanInputPos = konvaGroup.getAbsolutePosition();
       const booleanInputX = booleanInputPos.x;
       const booleanInputY = booleanInputPos.y;
 
+      console.log("Input attached:", booleanInputValue);
       return detectRectangleCollision(booleanInputX, booleanInputY, booleanInputWidth, booleanInputHeight, connectorX, connectorY, rectWidth, rectHeight);
     });
 
@@ -261,8 +269,15 @@ function connectorClick() {
   stage.add(layer);
 }
 
+function outputClick() {
+  for (let i = 0; i < gateArray.length; i++) {
+    alert("Result for Gate #" + i + " added: " + gateArray[i].gate.evaluateInputs());
+  }
+}
+
 window.trueInputClick = trueInputClick;
 window.falseInputClick = falseInputClick;
 window.andGateClick = andGateClick;
 window.orGateClick = orGateClick;
 window.connectorClick = connectorClick;
+window.outputClick = outputClick;

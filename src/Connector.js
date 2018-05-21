@@ -30,6 +30,10 @@ class Connector {
     setOutput(output) {
         this.output = output;
     }
+
+    getValue() {
+        return this.input.getValue();
+    }
 }
 
 export default Connector;

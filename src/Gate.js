@@ -4,10 +4,25 @@ import Connector from './Connector';
  * Class to represent a binary gate.
  */
 class Gate {
-    constructor() {
+    constructor(gateType) {
         this.input1 = null;
         this.input2 = null;
         this.output = null;
+        this.gateType = gateType;
+    }
+
+    evaluateInputs() {
+        switch (this.gateType) {
+            case 'AND':
+                return this.input1.getValue() && this.input2.getValue();
+            case 'OR':
+               return this.input1.getValue() || this.input2.getValue();
+        }
+        
+    }
+
+    getValue() {
+        return this.evaluateInputs();
     }
 
     /**
@@ -24,6 +39,7 @@ class Gate {
             }
             else {
                 this.input2 = input;
+                this.output = this.evaluateInputs();
             }
         }
         else if (!this.input1) {
